@@ -1,0 +1,7 @@
+architecture: replicaset
+auth:
+  enabled: true
+  rootPassword: yourpassword
+persistence:
+  enabled: true
+  size: 10Gi

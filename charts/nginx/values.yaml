@@ -1,0 +1,6 @@
+controller:
+  config:
+    use-proxy-protocol: "true"
+    proxy-body-size: "0"
+    proxy-read-timeout: "600"
+    proxy-send-timeout: "600"

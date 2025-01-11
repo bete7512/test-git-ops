@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-configuration
+data:
+  nginx.conf: |
+    events { }
+    http {
+      upstream backend-primary {
+        server backend-service.production.svc.cluster.local:8080;
+      }
+      upstream backend-mirror {
+        server backend-service.staging.svc.cluster.local:8080;
+      }
+      
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://backend-primary;
+          mirror /mirror;
+        }
+        
+        location = /mirror {
+          internal;
+          proxy_pass http://backend-mirror$request_uri;
+        }
+      }
+    }
