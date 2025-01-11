@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: production-frontend
+  namespace: argocd
+spec:
+  project: production
+  source:
+    repoURL: https://github.com/yourusername/k8s-gitops.git
+    path: charts/frontend
+    targetRevision: HEAD
+    helm:
+      values: |
+        replicaCount: 2
+        image:
+          repository: yourregistry/frontend
+          tag: stable
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: production
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
